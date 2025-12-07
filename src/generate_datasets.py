@@ -20,27 +20,6 @@ def get_audio_path(track_id):
     AUDIO_DIR = './data/raw/fma_small'
     return os.path.join(AUDIO_DIR, track_number[:3], file_name)
 
-# def get_log_mel_spectrogram(filepath, display=False):
-
-#     x, sr = librosa.load(filepath, sr=None, mono=True)
-#     stft = np.abs(librosa.stft(x, n_fft=2048, hop_length=512)) # stft = Short-Time Fourier Transform
-
-#     # Mel-spectrogramme 
-#     mel = librosa.feature.melspectrogram(sr=sr, S=stft**2, n_mels=128) # sr = 
-
-#     # Conversion en dB (ancien logamplitude → remplacé)
-#     log_mel_spectrogram = librosa.power_to_db(mel, ref=np.max)
-
-#     if display:
-#         plt.figure(figsize=(10, 4))
-#         librosa.display.specshow(log_mel_spectrogram, sr=sr, hop_length=512,
-#                                 x_axis='time', y_axis='mel')
-#         plt.colorbar(format='%+2.0f dB')
-#         plt.title("Log-mel spectrogram")
-#         plt.show()
-
-#     return log_mel_spectrogram
-
 def get_log_mel_spectrogram(filepath, display=False):
 
     try:
@@ -76,36 +55,6 @@ def get_music_label(track_id: int, df_genres: pd.DataFrame) -> str:
     # return df_genres["genre_top"].iloc[track_id]
     return df_genres.loc[track_id, "genre_top"]
 
-
-# def save_log_mel_spectrogram(track_id: int,
-#                              df_genres: pd.DataFrame,
-#                              split: str,
-#                              base_output_dir: str = "./data/spectrograms"):
-#     """
-#     Génère le log-mel spectrogram d'un track et le sauve comme image PNG
-#     dans data/spectrograms/<split>/<genre>/<track_id>.png
-#     """
-
-#     audio_path = get_audio_path(track_id)
-#     label = get_music_label(track_id, df_genres)
-
-#     out_dir = os.path.join(base_output_dir, split, label)
-#     os.makedirs(out_dir, exist_ok=True)
-
-#     filename = f"{int(track_id):06d}.png"
-#     out_path = os.path.join(out_dir, filename)
-
-#     # 👉 si déjà créé on ne refait rien
-#     if os.path.exists(out_path):
-#         return out_path
-
-#     spec = get_log_mel_spectrogram(audio_path, display=False)
-#     spec_min = spec.min()
-#     spec_max = spec.max()
-#     spec_norm = (spec - spec_min) / (spec_max - spec_min + 1e-8)
-
-#     plt.imsave(out_path, spec_norm)
-#     return out_path
 
 def save_log_mel_spectrogram(track_id: int,
                              df_genres: pd.DataFrame,
