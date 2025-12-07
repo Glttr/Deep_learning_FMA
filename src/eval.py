@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 
 from .dataset import get_dataloaders
-from .models import BaselineCNN
+from .models import BaselineCNN, ImprovedCRNN
 from .train import set_seed, get_device, evaluate  # on réutilise ta fonction evaluate
 
 
@@ -59,13 +59,12 @@ def main():
     if model_name == "baseline":
         model = BaselineCNN(num_classes=8, in_channels=3).to(device)
     elif model_name == "improved":
-        from .models import ImprovedCNN
-        model = ImprovedCNN(num_classes=8, in_channels=3).to(device)
+        model = ImprovedCRNN(num_classes=8, in_channels=3).to(device)
     else:
         raise ValueError(f"Model name inconnu : {model_name}")
 
     # ==== Chargement du checkpoint ====
-    checkpoint = torch.load(ckpt_path, map_location=device)
+    checkpoint = torch.load(ckpt_path, map_location=device, weights_only=True)
     model.load_state_dict(checkpoint["model_state_dict"])
 
     print(f"Checkpoint chargé depuis epoch : {checkpoint.get('epoch', 'N/A')}")
