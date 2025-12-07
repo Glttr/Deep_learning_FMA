@@ -40,6 +40,7 @@ Example spectrogram :
 ## 📂 Project Structure
 ```
 project/
+├── assets/
 │
 ├── data/
 │   ├── raw/                     # MP3 files + metadata
