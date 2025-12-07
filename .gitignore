@@ -1,0 +1,44 @@
+# =====================================
+#  IGNORER LES DONNEES DU PROJET
+# =====================================
+
+# Données brutes (trop volumineuses)
+data/raw/
+
+# Datasets générés (spectrogrammes)
+data/spectrograms/
+
+# Splits si générés automatiquement
+data/splits/
+
+# Données brutes zip
+fma_metadata.zip
+fma_small.zip
+
+# Description du projet
+project.pdf
+
+# =====================================
+#  IGNORER LES CHECKPOINTS ET LOGS
+# =====================================
+
+outputs/checkpoints/
+outputs/logs/
+outputs/figures/
+
+# =====================================
+#  FICHIERS TEMPORAIRES DE PYTHON
+# =====================================
+
+__pycache__/
+*.pyc
+
+# Notebooks junk
+.ipynb_checkpoints/
+
+# =====================================
+#  ENVIRONNEMENTS
+# =====================================
+
+.env/
+venv/
