@@ -31,10 +31,9 @@ We use the **FMA-Small** dataset (Free Music Archive), containing:
 
 During preprocessing, each audio clip is transformed into a **128-mel-bin spectrogram**, normalized per track.
 
-Example spectrogram (placeholder):
-```
-![Example Spectrogram](path/to/example_spectrogram.png)
-```
+Example spectrogram :
+
+![Log-mel_spectogram_example](assets/Log-mel_spectogram_example.png)
 
 ---
 
