@@ -1,3 +1,4 @@
+import time
 import argparse
 import random
 import numpy as np
@@ -192,9 +193,18 @@ def main():
     # Optimizer: Adam
     optimizer = optim.Adam(model.parameters(), lr=lr)
 
+    log_path = f"./outputs/logs/{model_name}_logs.csv"
+    os.makedirs("./outputs/logs", exist_ok=True)
+
+    with open(log_path, "w") as f:
+        f.write("epoch,train_loss,train_acc,val_loss,val_acc\n")
+
     best_val_acc = 0.0
+    # ==== Timer global ====
+    training_start_time = time.time()
     # ==== Boucle d'entraînement ====
     for epoch in range(1, num_epochs + 1):
+        epoch_start_time = time.time()
         print(f"\n===== Epoch {epoch}/{num_epochs} =====")
 
         train_loss, train_acc = train_one_epoch(
@@ -204,8 +214,14 @@ def main():
             model, val_loader, criterion, device
         )
 
+        epoch_time = time.time() - epoch_start_time
+
         print(f"Train loss : {train_loss:.4f} | Train acc : {train_acc:.4f}")
         print(f"Val   loss : {val_loss:.4f} | Val   acc : {val_acc:.4f}")
+        print(f"Temps epoch : {epoch_time:.1f} s")
+        with open(log_path, "a") as f:
+            f.write(f"{epoch},{train_loss},{train_acc},{val_loss},{val_acc}\n")
+
                 # === Sauvegarde du meilleur modèle (selon val_acc) ===
         if val_acc > best_val_acc:
             best_val_acc = val_acc
@@ -215,6 +231,7 @@ def main():
                 "model_state_dict": model.state_dict(),
                 "optimizer_state_dict": optimizer.state_dict(),
                 "val_acc": val_acc,
+                "train_acc": train_acc,
                 "config": {
                     "num_classes": num_classes,
                     "batch_size": batch_size,
@@ -232,6 +249,8 @@ def main():
     print("\n===== Évaluation finale sur le test set =====")
     print(f"Test loss : {test_loss:.4f} | Test acc : {test_acc:.4f}")
 
+    total_time = time.time() - training_start_time
+    print(f"\nTemps total d'entraînement : {total_time/60:.1f} min")
 
 if __name__ == "__main__":
     main()
