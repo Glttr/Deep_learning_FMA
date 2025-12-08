@@ -43,9 +43,9 @@ project/
 ├── assets/
 │
 ├── data/
-│   ├── raw/                     # MP3 files + metadata
-│   │   ├── fma_metadata/
-│   │   ├── fma_small/
+│   ├── raw/                     
+│   │   ├── fma_metadata/        # Metadata
+│   │   ├── fma_small/           # MP3 files
 │   ├── spectrograms/            # Precomputed mel-spectrogram PNGs
 │   │   ├── train/
 │   │   ├── val/
@@ -127,6 +127,22 @@ pip install -r requirements.txt
 ---
 
 ## ▶️ Usage
+### 0. Download and save fma_small and fma_metadata
+
+```
+mkdir -p data && wget https://os.unil.cloud.switch.ch/fma/fma_small.zip -O data/fma_small.zip
+```
+```
+wget https://os.unil.cloud.switch.ch/fma/fma_metadata.zip -O data/fma_metadata.zip
+```
+```
+unzip data/raw/fma_small.zip -d data/ 
+```
+```
+unzip data/raw/fma_metadata.zip -d data/
+```
+
+
 ### 1. Generate spectrograms
 ```
 python -m src.generate_datasets

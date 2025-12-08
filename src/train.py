@@ -8,7 +8,7 @@ import torch.nn as nn
 import torch.optim as optim
 
 from .dataset import get_dataloaders
-from .models import BaselineCNN, ImprovedCRNN
+from .models import BaselineCNN, ImprovedCRNN, CNN_other, ImprovedCRNNv2
 
 def get_args():
     parser = argparse.ArgumentParser(description="Training script for CNN models")
@@ -17,7 +17,7 @@ def get_args():
         "--model",
         type=str,
         default="baseline",
-        choices=["baseline", "improved"],
+        choices=["baseline", "improved", "improved_v2", "CNN_other"],
         help="Choose which model to train"
     )
 
@@ -164,6 +164,10 @@ def main():
         model = BaselineCNN(num_classes=num_classes, in_channels=3).to(device)
     elif model_name == "improved":
         model = ImprovedCRNN(num_classes=num_classes, in_channels=3).to(device)
+    elif model_name == "improved_v2":
+        model = ImprovedCRNNv2(num_classes=num_classes, in_channels=3).to(device)
+    elif model_name == "CNN_other":
+        model = CNN_other(num_classes=num_classes, in_channels=3).to(device)
     else:
         raise ValueError(f"Model name inconnu : {model_name}")
 
