@@ -3,7 +3,7 @@ import torch
 import torch.nn as nn
 
 from .dataset import get_dataloaders
-from .models import BaselineCNN, ImprovedCRNN
+from .models import BaselineCNN, ImprovedCRNN, ImprovedCRNNv2
 from .train import set_seed, get_device, evaluate  # on réutilise ta fonction evaluate
 
 
@@ -14,7 +14,7 @@ def get_args():
         "--model",
         type=str,
         default="baseline",
-        choices=["baseline", "improved"],
+        choices=["baseline", "improved", "improved_v2"],
         help="Choose which model to evaluate",
     )
 
@@ -60,6 +60,8 @@ def main():
         model = BaselineCNN(num_classes=8, in_channels=3).to(device)
     elif model_name == "improved":
         model = ImprovedCRNN(num_classes=8, in_channels=3).to(device)
+    elif model_name == "improved_v2":
+        model = ImprovedCRNNv2(num_classes=8, in_channels=3).to(device)
     else:
         raise ValueError(f"Model name inconnu : {model_name}")
 
