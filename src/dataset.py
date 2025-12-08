@@ -1,15 +1,58 @@
 import os
+import sys
 from typing import Tuple
 
+import pandas as pd
 import torch
 from torch.utils.data import DataLoader
 from torchvision import datasets, transforms
 
-# racine où tu as mis tes spectrogrammes
+# racine il y a les spectrogrammes
 DATA_DIR = "./data/spectrograms"
 
 
 from torchvision import transforms
+
+
+def generate_clean_sets():
+    if not os.path.isdir("./data/raw/fma_metadata"):
+        print('fma_metadata is not downloaded or well located ! Download fma_metadata in data/raw. Do the same for fma_small as well !')
+        return None
+
+    cols = [
+        ('track', 'genre_top'),
+        ('track', 'genres'),
+        ('track', 'genres_all')
+    ]
+    tracks = pd.read_csv('./data/raw/fma_metadata/tracks.csv', index_col=0, header=[0, 1]) # index_col=0, header=[0, 1, 2]
+    small = tracks[tracks['set', 'subset'] == 'small']
+    small_train = small[small['set', 'split'] == 'training']
+    small_val = small[small['set', 'split'] == 'validation']
+    small_test = small[small['set', 'split'] == 'test']
+
+
+    # train
+    train_genres = small_train[cols].copy()
+    train_genres.columns = train_genres.columns.get_level_values(-1)
+
+    # val
+    val_genres = small_val[cols].copy()
+    val_genres.columns = val_genres.columns.get_level_values(-1)
+
+    # test
+    test_genres = small_test[cols].copy()
+    test_genres.columns = test_genres.columns.get_level_values(-1)
+
+    train_genres.head()
+
+    train_genres.to_csv('./data/raw/fma_metadata/small_train_genres.csv', index='track_id')
+    val_genres.to_csv('./data/raw/fma_metadata/small_val_genres.csv', index='track_id')
+    test_genres.to_csv('./data/raw/fma_metadata/small_test_genres.csv', index='track_id')
+    print('./data/raw/fma_metadata/small_test_genres.csv, small_train_genres.csv and small_val_genres.csv have been generated !')
+    return None
+
+
+
 
 def get_transforms():
     """
@@ -89,12 +132,41 @@ def get_dataloaders(
 
 
 if __name__ == "__main__":
+
+    if not os.path.isfile("./data/raw/fma_metadata/small_train_genres.csv"):
+        print("Clean genre CSVs not found, generating them with generate_clean_sets()...")
+        generate_clean_sets()
+
+    required_dirs = [
+        "./data/spectrograms/train",
+        "./data/spectrograms/val",
+        "./data/spectrograms/test"
+    ]
+
+    missing = [d for d in required_dirs if not os.path.isdir(d)]
+
+    if missing:
+        print("Some spectrogram folders are missing:")
+        for d in missing:
+            print(" -", d)
+
+        # On crée l'arborescence vide au cas où
+        for d in required_dirs:
+            os.makedirs(d, exist_ok=True)
+
+        print(
+            "\nFolders have been created, but they are empty.\n"
+            "Please run your script that generates mel-spectrogram PNGs "
+            "into data/spectrograms/train|val|test before training."
+        )   
+        sys.exit(0)
+
     train_loader, val_loader, test_loader = get_dataloaders(batch_size=8)
 
     batch = next(iter(train_loader))
     images, labels = batch
 
-    print("Taille batch d'images :", images.shape)   # attendu: [8, 1, H, W]
+    print("Taille batch d'images :", images.shape)   # attendu: [8, 3, H, W]
     print("Taille batch de labels :", labels.shape)
     print("Labels dans ce batch :", labels)
 

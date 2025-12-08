@@ -176,8 +176,8 @@ def main():
 
     if device.type == "cuda":
         gpu_index = torch.cuda.current_device()  # en général 0
-        torch.cuda.set_per_process_memory_fraction(0.7, device=gpu_index)
-        print("Limite de mémoire GPU : 70% de la VRAM")
+        torch.cuda.set_per_process_memory_fraction(0.8, device=gpu_index)
+        print("Limite de mémoire GPU : 80% de la VRAM")
 
 
     # ==== Data ====

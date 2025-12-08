@@ -52,7 +52,7 @@ class ImprovedCRNN(nn.Module):
     """
 
     def __init__(self, num_classes: int = 8, in_channels: int = 3,
-                 rnn_hidden_size: int = 64):
+                 rnn_hidden_size: int = 256):
         super().__init__()
 
         # Même backbone CNN que la baseline (pour comparaison honnête)
@@ -60,14 +60,14 @@ class ImprovedCRNN(nn.Module):
             nn.Conv2d(in_channels, 16, kernel_size=3, padding=1),
             nn.ReLU(inplace=True),
             nn.MaxPool2d(2),          # (128, 256) -> (64, 128)
-            nn.Dropout2d(0.25),
+            nn.Dropout2d(0.1),
         )
 
         self.block2 = nn.Sequential(
             nn.Conv2d(16, 32, kernel_size=3, padding=1),
             nn.ReLU(inplace=True),
             nn.MaxPool2d(2),          # (64, 128) -> (32, 64)
-            nn.Dropout2d(0.25),
+            nn.Dropout2d(0.1),
         )
 
         self.block3 = nn.Sequential(
