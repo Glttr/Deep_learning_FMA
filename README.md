@@ -99,11 +99,6 @@ The baseline CNN treats the spectrogram as a static 2D image and **does not expl
 Spectrogram → CNN feature extractor → Sequence of feature vectors → BiGRU → Classifier
 ```
 
-Architecture diagram (placeholder):
-```
-![Log-mel_spectogram_example](Log-mel_spectogram_example.png)
-```
-
 ### Expected Improvement
 Performance is measured by comparing **test accuracy** of:
 - baseline CNN
@@ -188,7 +183,7 @@ Each checkpoint stores:
 ---
 
 ## 📊 Results
-A comparison table (to be filled when CRNN results are available):
+A comparison table :
 ```
 | Model        | Val Acc | Test Acc |
 |--------------|---------|----------|
